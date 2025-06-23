@@ -1,57 +1,59 @@
+const path = require('path');
+
 module.exports = ({ env }) => {
-  // Configuración para producción con PostgreSQL
-  if (env('NODE_ENV') === 'production' || env('DATABASE_URL')) {
-    const config = {
+  const client = env('DATABASE_CLIENT', 'postgres');
+
+  const connections = {
+    mysql: {
       connection: {
-        client: 'postgres',
-        connection: {
-          host: env('DATABASE_HOST'),
-          port: env.int('DATABASE_PORT', 5432),
-          database: env('DATABASE_NAME'),
-          user: env('DATABASE_USERNAME'),
-          password: env('DATABASE_PASSWORD'),
-          ssl: {
-            rejectUnauthorized: false
-          },
+        host: env('DATABASE_HOST', 'localhost'),
+        port: env.int('DATABASE_PORT', 3306),
+        database: env('DATABASE_NAME', 'strapi'),
+        user: env('DATABASE_USERNAME', 'strapi'),
+        password: env('DATABASE_PASSWORD', 'strapi'),
+        ssl: env.bool('DATABASE_SSL', false) && {
+          key: env('DATABASE_SSL_KEY', undefined),
+          cert: env('DATABASE_SSL_CERT', undefined),
+          ca: env('DATABASE_SSL_CA', undefined),
+          capath: env('DATABASE_SSL_CAPATH', undefined),
+          cipher: env('DATABASE_SSL_CIPHER', undefined),
+          rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', true),
         },
-        pool: {
-          min: 0,
-          max: 10,
-          acquireTimeoutMillis: 300000,
-          createTimeoutMillis: 300000,
-          destroyTimeoutMillis: 5000,
-          idleTimeoutMillis: 30000,
-          reapIntervalMillis: 1000,
-          createRetryIntervalMillis: 100,
-        },
-        debug: false,
       },
-    };
-
-    console.log('🔍 Database config:', {
-      host: env('DATABASE_HOST'),
-      port: env('DATABASE_PORT'),
-      database: env('DATABASE_NAME'),
-      user: env('DATABASE_USERNAME'),
-      ssl: true
-    });
-
-    return config;
-  }
-
-  // Configuración para desarrollo local
-  return {
-    connection: {
-      client: 'postgres',
+      pool: { min: env.int('DATABASE_POOL_MIN', 2), max: env.int('DATABASE_POOL_MAX', 10) },
+    },
+    postgres: {
       connection: {
         host: env('DATABASE_HOST', '127.0.0.1'),
         port: env.int('DATABASE_PORT', 5432),
-        database: env('DATABASE_NAME', 'wt_mechanics'),
-        user: env('DATABASE_USERNAME', 'postgres'),
-        password: env('DATABASE_PASSWORD', '198723'),
-        ssl: false,
+        database: env('DATABASE_NAME', 'wt_mechanics_h9q3'),
+        user: env('DATABASE_USERNAME', 'wt_mechanics_h9q3_user'),
+        password: env('DATABASE_PASSWORD', 'KRzx7Il4GHTbuZrLz2vvMyWdwJmgWpqK'),
+        ssl: env.bool('DATABASE_SSL', false) && {
+          key: env('DATABASE_SSL_KEY', undefined),
+          cert: env('DATABASE_SSL_CERT', undefined),
+          ca: env('DATABASE_SSL_CA', undefined),
+          capath: env('DATABASE_SSL_CAPATH', undefined),
+          cipher: env('DATABASE_SSL_CIPHER', undefined),
+          rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', true),
+        },
+        schema: env('DATABASE_SCHEMA', 'public'),
+      },
+      pool: { min: env.int('DATABASE_POOL_MIN', 2), max: env.int('DATABASE_POOL_MAX', 10) },
+    },
+    sqlite: {
+      connection: {
+        filename: path.join(__dirname, '..', env('DATABASE_FILENAME', '.tmp/data.db')),
       },
       useNullAsDefault: true,
+    },
+  };
+
+  return {
+    connection: {
+      client,
+      ...connections[client],
+      acquireConnectionTimeout: env.int('DATABASE_CONNECTION_TIMEOUT', 60000),
     },
   };
 };
