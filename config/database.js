@@ -2,7 +2,22 @@ const path = require('path');
 
 module.exports = ({ env }) => {
   const client = env('DATABASE_CLIENT', 'postgres');
+  const databaseUrl = env('DATABASE_URL');
 
+  // Si tienes DATABASE_URL (como en Neon), úsala directamente
+  if (databaseUrl) {
+    return {
+      connection: {
+        client,
+        connection: {
+          connectionString: databaseUrl,
+          ssl: { rejectUnauthorized: false },
+        },
+      },
+    };
+  }
+
+  // Si NO hay DATABASE_URL, usa configuración clásica por tipo
   const connections = {
     mysql: {
       connection: {
@@ -20,7 +35,10 @@ module.exports = ({ env }) => {
           rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', true),
         },
       },
-      pool: { min: env.int('DATABASE_POOL_MIN', 2), max: env.int('DATABASE_POOL_MAX', 10) },
+      pool: {
+        min: env.int('DATABASE_POOL_MIN', 2),
+        max: env.int('DATABASE_POOL_MAX', 10),
+      },
     },
     postgres: {
       connection: {
