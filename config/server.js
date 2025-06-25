@@ -1,4 +1,5 @@
 module.exports = ({ env }) => ({
+    url: env('BACKEND_URL'), // Esto asegura que las imágenes usen la URL pública
   host: env('HOST', '0.0.0.0'),
   port: env.int('PORT', 1337),
   app: {
