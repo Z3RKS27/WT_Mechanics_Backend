@@ -12,6 +12,7 @@ module.exports = [
       // Opciones adicionales si las necesitas:
       headers: ['*'],
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+      credentials: true,
     }
   },
   'strapi::poweredBy',
