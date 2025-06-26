@@ -7,8 +7,7 @@ module.exports = [
     config: {
       origin: ['http://localhost:3000',
         'http://192.168.0.3:3000',
-        'https://wt-mechanics-nld8-b0etzdg35-z3rks27s-projects.vercel.app',
-      ],
+        'https://wt-mechanics-nld8.vercel.app/'],
       // Opciones adicionales si las necesitas:
       headers: ['*'],
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
