@@ -1,23 +1,22 @@
 module.exports = [
-  'strapi::logger',
   'strapi::errors',
-  'strapi::security',
   {
     name: 'strapi::cors',
     config: {
-      origin: ['http://localhost:3000',
-        'http://192.168.0.3:3000',
-        'https://wt-mechanics-nld8.vercel.app/'],
-      // Opciones adicionales si las necesitas:
-      headers: ['*'],
-      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-      credentials: true,
-    }
+      enabled: true,
+      origin: [
+        'https://wt-mechanics-nld8-m55bj1zvz-z3rks27s-projects.vercel.app', // ✅ dominio de Vercel
+        'http://localhost:3000', // opcional para desarrollo local
+      ],
+      headers: '*',
+    },
   },
+  'strapi::security',
   'strapi::poweredBy',
+  'strapi::logger',
   'strapi::query',
   'strapi::body',
   'strapi::session',
   'strapi::favicon',
-  'strapi::public'
+  'strapi::public',
 ];
