@@ -5,7 +5,7 @@ module.exports = [
     config: {
       enabled: true,
       origin: [
-        'https://wt-mechanics-nld8-vnc4b0tpj-z3rks27s-projects.vercel.app', // ✅ dominio de Vercel
+        'https://wt-mechanics-nld8-eynk5769m-z3rks27s-projects.vercel.app', // ✅ dominio de Vercel
         'http://localhost:3000', // opcional para desarrollo local
       ],
       headers: '*',
